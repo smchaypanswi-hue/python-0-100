@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python 0→100</title>
+<style>
+:root{--bg:#f6f8fc;--card:#fff;--tx:#1b2433;--mut:#5d6b82;--ac:#3776ab;--ac2:#f7c948;--bd:#dde3ee;--code:#0f1724;--codetx:#d7e3ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d121c;--card:#161d2b;--tx:#e8eefb;--mut:#93a1ba;--bd:#26314a;--ac:#6aa9e0;--code:#080c14}}
+:root[data-theme="dark"]{--bg:#0d121c;--card:#161d2b;--tx:#e8eefb;--mut:#93a1ba;--bd:#26314a;--ac:#6aa9e0;--code:#080c14}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Noto Sans Thai","Sarabun",system-ui,sans-serif;line-height:1.6}
+.hide{display:none!important}
+#lobby{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:linear-gradient(160deg,#1d3f66,#3776ab 55%,#f7c948);color:#fff}
+#lobby h1{font-size:clamp(2.4rem,9vw,4.5rem);margin:0}
+#lobby p{max-width:520px;opacity:.95}
+.big{background:#fff;color:#1d3f66;border:0;border-radius:999px;padding:14px 36px;font:700 1.1rem inherit;font-family:inherit;cursor:pointer;margin-top:12px}
+.pill{display:inline-block;background:rgba(255,255,255,.2);padding:4px 14px;border-radius:99px;margin:4px;font-size:.9rem}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--card);border-bottom:1px solid var(--bd);z-index:5;padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+header b{color:var(--ac);cursor:pointer;margin-right:auto}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{border:1px solid var(--bd);background:transparent;color:var(--tx);padding:8px 14px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:.95rem}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:900px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px}
+.card h3{margin:0 0 4px}.mut{color:var(--mut);font-size:.92rem}
+pre{background:var(--code);color:var(--codetx);padding:12px;border-radius:10px;overflow-x:auto;margin:8px 0;font:.9rem/1.5 ui-monospace,Menlo,Consolas,monospace}
+.out{border-left:4px solid var(--ac2)}
+.bar{height:10px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));width:0;transition:width .3s}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.chip{border:1px solid var(--bd);background:transparent;color:var(--tx);padding:6px 12px;border-radius:99px;cursor:pointer;font-family:inherit}
+.chip.on{background:var(--ac2);color:#222;border-color:var(--ac2)}
+input[type=search]{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-family:inherit;font-size:1rem}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+.tw{overflow-x:auto}code.k{background:var(--code);color:var(--ac2);padding:2px 8px;border-radius:6px}
+.sm{font-size:.85rem;padding:5px 10px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--tx);cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+<section id="lobby">
+  <div style="font-size:4rem">🐍</div>
+  <h1>Python 0 → 100</h1>
+  <p>เรียนเขียนโค้ด Python ตั้งแต่ไม่เคยเขียนโปรแกรมเลย ไปจนถึงเขียน OOP และโปรเจกต์ได้เอง เรียนทีละขั้น มีตัวอย่างโค้ดและผลลัพธ์</p>
+  <div><span class="pill">💻 Code</span><span class="pill">📘 เนื้อหา</span><span class="pill">🔤 คำศัพท์</span><span class="pill">📦 Import</span></div>
+  <button class="big" onclick="enter()">เริ่มเรียนเลย →</button>
+</section>
+
+<div id="app" class="hide">
+  <header><b onclick="lobby()">🐍 Python 0→100</b>
+    <nav id="nav"></nav>
+  </header>
+  <main id="main"></main>
+</div>
+
+<script>
+const L=[
+{t:"เริ่มต้น & print()",r:"0–10",d:"Python คือภาษาที่อ่านง่าย ใช้ได้ทั้งเว็บ ข้อมูล AI และสคริปต์ ติดตั้งจาก python.org แล้วพิมพ์ข้อความออกหน้าจอด้วย print()",c:'print("สวัสดี Python!")\nprint(1 + 2)\n# บรรทัดที่ขึ้นต้นด้วย # คือคอมเมนต์',o:"สวัสดี Python!\n3"},
+{t:"ตัวแปร & ชนิดข้อมูล",r:"10–20",d:"ตัวแปรคือกล่องเก็บค่า ชนิดหลัก: int (จำนวนเต็ม), float (ทศนิยม), str (ข้อความ), bool (True/False)",c:'name = "แพร"\nage = 20\nheight = 1.65\nstudent = True\nprint(name, age, type(height))',o:"แพร 20 <class 'float'>"},
+{t:"ตัวดำเนินการ",r:"20–30",d:"คำนวณด้วย + - * / // % ** เปรียบเทียบด้วย == != < > และเชื่อมเงื่อนไขด้วย and or not",c:'print(7 / 2)   # 3.5\nprint(7 // 2)  # 3\nprint(7 % 2)   # 1\nprint(2 ** 3)  # 8\nprint(5 > 3 and 2 == 2)',o:"3.5\n3\n1\n8\nTrue"},
+{t:"รับค่า input() & f-string",r:"30–40",d:"input() รับข้อความจากผู้ใช้ (ได้ str เสมอ) แปลงด้วย int() หรือ float() และจัดรูปข้อความด้วย f-string",c:'name = input("ชื่อ: ")\nage = int(input("อายุ: "))\nprint(f"{name} อีก 1 ปีจะอายุ {age+1}")',o:"ชื่อ: แพร\nอายุ: 20\nแพร อีก 1 ปีจะอายุ 21"},
+{t:"เงื่อนไข if / elif / else",r:"40–50",d:"ให้โปรแกรมตัดสินใจ ย่อหน้า (indent) สำคัญมากใน Python",c:'score = 72\nif score >= 80:\n    print("A")\nelif score >= 60:\n    print("B")\nelse:\n    print("C")',o:"B"},
+{t:"ลูป for / while",r:"50–60",d:"for วนตามชุดข้อมูล while วนตราบที่เงื่อนไขยังจริง ใช้ break ออกจากลูป continue ข้ามรอบ",c:'for i in range(1, 4):\n    print("รอบที่", i)\n\nn = 3\nwhile n > 0:\n    print(n)\n    n -= 1',o:"รอบที่ 1\nรอบที่ 2\nรอบที่ 3\n3\n2\n1"},
+{t:"List / Tuple / Dict / Set",r:"60–70",d:"list แก้ไขได้ [ ] · tuple แก้ไม่ได้ ( ) · dict คู่ key:value { } · set ไม่ซ้ำ { }",c:'fruits = ["แอปเปิล", "กล้วย"]\nfruits.append("ส้ม")\nuser = {"name": "แพร", "age": 20}\nprint(len(fruits), user["name"])\nprint(set([1, 1, 2, 3]))',o:"3 แพร\n{1, 2, 3}"},
+{t:"ฟังก์ชัน def",r:"70–80",d:"รวมโค้ดที่ใช้ซ้ำไว้ในชื่อเดียว รับพารามิเตอร์ได้ ส่งค่ากลับด้วย return",c:'def area(w, h=1):\n    return w * h\n\nprint(area(3, 4))\nprint(area(5))',o:"12\n5"},
+{t:"ไฟล์ & จัดการข้อผิดพลาด",r:"80–88",d:"เปิดไฟล์ด้วย with open() (ปิดไฟล์ให้อัตโนมัติ) และดักข้อผิดพลาดด้วย try / except",c:'try:\n    n = int("abc")\nexcept ValueError:\n    print("ไม่ใช่ตัวเลข")\n\nwith open("a.txt", "w") as f:\n    f.write("hello")',o:"ไม่ใช่ตัวเลข"},
+{t:"Comprehension, lambda",r:"88–94",d:"เขียนโค้ดสั้นแบบ Pythonic: list comprehension, lambda, sorted/map/filter",c:'sq = [x*x for x in range(5)]\nprint(sq)\nprint(sorted(["bb","a","ccc"], key=len))\nadd = lambda a, b: a + b\nprint(add(2, 3))',o:"[0, 1, 4, 9, 16]\n['a', 'bb', 'ccc']\n5"},
+{t:"คลาส & OOP",r:"94–100",d:"จัดโปรแกรมเป็นวัตถุ: class, __init__, self, method และการสืบทอด (inheritance) แล้วนำไปทำโปรเจกต์จริง",c:'class Dog:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return f"{self.name}: โฮ่ง!"\n\nprint(Dog("ข้าวโพด").speak())',o:"ข้าวโพด: โฮ่ง!"}
+];
+const K=[["if / elif / else","ถ้า / ไม่งั้นถ้า / ไม่งั้น","เงื่อนไข"],["for","วนซ้ำตามชุดข้อมูล","ลูป"],["while","วนซ้ำตราบที่เงื่อนไขจริง","ลูป"],["break","ออกจากลูป","ลูป"],["continue","ข้ามไปรอบถัดไป","ลูป"],["def","สร้างฟังก์ชัน","ฟังก์ชัน"],["return","ส่งค่ากลับจากฟังก์ชัน","ฟังก์ชัน"],["lambda","ฟังก์ชันไม่มีชื่อแบบสั้น","ฟังก์ชัน"],["class","สร้างคลาส (แม่แบบวัตถุ)","OOP"],["self","อ้างถึงวัตถุตัวเอง","OOP"],["import / from","นำเข้าโมดูล","โมดูล"],["as","ตั้งชื่อเล่นให้โมดูล/ตัวแปร","โมดูล"],["try / except","ดักข้อผิดพลาด","Error"],["finally","ทำเสมอไม่ว่าจะ error หรือไม่","Error"],["raise","สร้าง error เอง","Error"],["with","จัดการทรัพยากร เช่น ไฟล์","ไฟล์"],["True / False","ค่าจริง / เท็จ","ชนิดข้อมูล"],["None","ไม่มีค่า","ชนิดข้อมูล"],["and / or / not","และ / หรือ / ไม่","ตัวดำเนินการ"],["in","อยู่ใน (ตรวจสมาชิก)","ตัวดำเนินการ"],["is","เป็นวัตถุเดียวกันหรือไม่","ตัวดำเนินการ"],["pass","ไม่ทำอะไร (ที่กั้นตำแหน่ง)","อื่นๆ"],["global","ใช้ตัวแปรระดับโปรแกรม","ตัวแปร"],["del","ลบตัวแปร/สมาชิก","ตัวแปร"],["yield","คืนค่าทีละตัว (generator)","ขั้นสูง"],["async / await","เขียนโปรแกรมแบบไม่รอ","ขั้นสูง"],["print()","แสดงผล","ฟังก์ชันในตัว"],["input()","รับค่า","ฟังก์ชันในตัว"],["len()","นับจำนวนสมาชิก","ฟังก์ชันในตัว"],["range()","สร้างลำดับตัวเลข","ฟังก์ชันในตัว"],["type()","ดูชนิดข้อมูล","ฟังก์ชันในตัว"],["int() float() str()","แปลงชนิดข้อมูล","ฟังก์ชันในตัว"]];
+const M=[
+{n:"math",d:"คณิตศาสตร์",c:'import math\nprint(math.sqrt(16))\nprint(math.pi)',o:"4.0\n3.141592653589793"},
+{n:"random",d:"สุ่มค่า",c:'import random\nprint(random.randint(1, 6))\nprint(random.choice(["a","b"]))',o:"(สุ่ม) เช่น 4 และ b"},
+{n:"datetime",d:"วันและเวลา",c:'from datetime import datetime\nprint(datetime.now().year)',o:"2026"},
+{n:"os",d:"ทำงานกับระบบไฟล์",c:'import os\nprint(os.listdir("."))',o:"['a.txt', ...]"},
+{n:"json",d:"อ่าน/เขียนข้อมูล JSON",c:'import json\ns = json.dumps({"a": 1})\nprint(json.loads(s)["a"])',o:"1"},
+{n:"collections",d:"โครงสร้างข้อมูลพิเศษ",c:'from collections import Counter\nprint(Counter("banana"))',o:"Counter({'a': 3, 'n': 2, 'b': 1})"},
+{n:"requests (ติดตั้งเพิ่ม)",d:"เรียก API / เว็บ  ·  pip install requests",c:'import requests\nr = requests.get("https://example.com")\nprint(r.status_code)',o:"200"},
+{n:"numpy / pandas (ติดตั้งเพิ่ม)",d:"วิเคราะห์ข้อมูล  ·  pip install numpy pandas",c:'import numpy as np\nprint(np.array([1,2,3]).mean())',o:"2.0"}
+];
+const S="from x import y   # นำเข้าเฉพาะบางส่วน\nimport x as z      # ตั้งชื่อเล่น\nimport x           # นำเข้าทั้งโมดูล";
+let tab="content",lv=0,done=new Set();
+try{done=new Set(JSON.parse(localStorage.getItem("py-done")||"[]"))}catch(e){}
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const blk=(c,o)=>`<pre>${esc(c)}</pre>`+(o?`<pre class="out">▶ ${esc(o)}</pre>`:"");
+function enter(){$("#lobby").classList.add("hide");$("#app").classList.remove("hide");go("content");scrollTo(0,0)}
+function lobby(){$("#app").classList.add("hide");$("#lobby").classList.remove("hide")}
+function go(t){tab=t;
+ const tabs=[["code","&lt;/&gt; Code"],["content","📘 เนื้อหา"],["words","🔤 คำที่ใช้"],["imp","📦 import"]];
+ $("#nav").innerHTML=tabs.map(([k,n])=>`<button class="${k==t?"on":""}" onclick="go('${k}')">${n}</button>`).join("");
+ ({code:vCode,content:vContent,words:vWords,imp:vImport})[t]();}
+function vContent(){
+ const p=Math.round(done.size/L.length*100);
+ $("#main").innerHTML=`<div class="card"><h3>ความคืบหน้า ${p}%</h3><div class="bar"><i style="width:${p}%"></i></div><div class="mut">ติ๊ก "เรียนแล้ว" เมื่อจบแต่ละบท</div></div>`+
+ L.map((x,i)=>`<div class="card"><div class="mut">บทที่ ${i+1} · ระดับ ${x.r}%</div><h3>${x.t}</h3><p>${x.d}</p>${blk(x.c,x.o)}<label><input type="checkbox" ${done.has(i)?"checked":""} onchange="tg(${i})"> เรียนแล้ว</label></div>`).join("");}
+function tg(i){done.has(i)?done.delete(i):done.add(i);try{localStorage.setItem("py-done",JSON.stringify([...done]))}catch(e){}vContent()}
+function vCode(){
+ const x=L[lv];
+ $("#main").innerHTML=`<div class="card"><h3>&lt;/&gt; ตัวอย่างโค้ด</h3><div class="mut">เลือกบท แก้โค้ดในช่องด้านล่าง แล้วคัดลอกไปรันใน IDLE / VS Code / Colab</div>
+ <div class="row">${L.map((y,i)=>`<button class="chip ${i==lv?"on":""}" onclick="lv=${i};vCode()">${i+1}</button>`).join("")}</div>
+ <b>${x.t}</b><textarea id="ed" spellcheck="false" style="width:100%;height:190px;margin-top:8px;background:var(--code);color:var(--codetx);border:0;border-radius:10px;padding:12px;font:.9rem/1.5 ui-monospace,Menlo,monospace">${esc(x.c)}</textarea>
+ <div class="row"><button class="sm" onclick="cp()">📋 คัดลอกโค้ด</button><button class="sm" onclick="document.getElementById('ed').value=L[lv].c">↺ รีเซ็ต</button></div>
+ <div class="mut">ผลลัพธ์ที่ควรได้</div><pre class="out">▶ ${esc(x.o)}</pre></div>`;}
+function cp(){const v=$("#ed");v.select();try{navigator.clipboard.writeText(v.value)}catch(e){document.execCommand("copy")}}
+function vWords(){
+ $("#main").innerHTML=`<div class="card"><h3>🔤 คำที่ใช้ในการเขียนโปรแกรม</h3><input type="search" id="q" placeholder="ค้นหา เช่น for, ฟังก์ชัน..." oninput="fw()"><div class="tw"><table id="tb"></table></div></div>`;fw();}
+function fw(){const q=($("#q")?.value||"").toLowerCase();
+ $("#tb").innerHTML="<tr><th>คำ</th><th>ความหมาย</th><th>หมวด</th></tr>"+K.filter(r=>r.join(" ").toLowerCase().includes(q)).map(r=>`<tr><td><code class="k">${esc(r[0])}</code></td><td>${r[1]}</td><td class="mut">${r[2]}</td></tr>`).join("");}
+function vImport(){
+ $("#main").innerHTML=`<div class="card"><h3>📦 import คืออะไร</h3><p>import คือการนำโค้ดสำเร็จรูป (โมดูล/ไลบรารี) มาใช้ ไม่ต้องเขียนเองใหม่ ไลบรารีนอกที่มากับ Python ติดตั้งด้วย <code class="k">pip install ชื่อ</code></p>${blk(S)}</div>`+
+ M.map(m=>`<div class="card"><h3>${m.n}</h3><div class="mut">${m.d}</div>${blk(m.c,m.o)}</div>`).join("");}
+</script>
+</body>
+</html>
