@@ -14,7 +14,7 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:"Noto Sans Thai",
 #lobby{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:linear-gradient(160deg,#1d3f66,#3776ab 55%,#f7c948);color:#fff}
 #lobby h1{font-size:clamp(2.4rem,9vw,4.5rem);margin:0}
 #lobby p{max-width:520px;opacity:.95}
-.big{background:#fff;color:#1d3f66;border:0;border-radius:999px;padding:14px 36px;font:700 1.1rem inherit;font-family:inherit;cursor:pointer;margin-top:12px}
+.big{background:#fff;color:#1d3f66;border:0;border-radius:999px;padding:14px 36px;font-weight:700;font-size:1.2rem;font-family:inherit;box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer;margin-top:12px}
 .pill{display:inline-block;background:rgba(255,255,255,.2);padding:4px 14px;border-radius:99px;margin:4px;font-size:.9rem}
 header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--card);border-bottom:1px solid var(--bd);z-index:5;padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 header b{color:var(--ac);cursor:pointer;margin-right:auto}
@@ -40,8 +40,8 @@ table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px so
 <section id="lobby">
   <div style="font-size:4rem">🐍</div>
   <h1>Python 0 → 100</h1>
-  <p>เรียนเขียนโค้ด Python ตั้งแต่ไม่เคยเขียนโปรแกรมเลย ไปจนถึงเขียน OOP และโปรเจกต์ได้เอง เรียนทีละขั้น มีตัวอย่างโค้ดและผลลัพธ์</p>
-  <div><span class="pill">💻 Code</span><span class="pill">📘 เนื้อหา</span><span class="pill">🔤 คำศัพท์</span><span class="pill">📦 Import</span></div>
+  <p>เรียนเขียนโค้ด Python ตั้งแต่ไม่เคยเขียนโปรแกรมเลย ไปจนถึงเขียน OOP แล้วต่อยอดสร้างเว็บและเกมได้เอง เรียนทีละขั้น มีตัวอย่างโค้ด ตัวจำลอง และ Python จริงในหน้าเว็บ</p>
+  <div><span class="pill">💻 Code</span><span class="pill">📘 เนื้อหา</span><span class="pill">🔤 คำศัพท์</span><span class="pill">📦 Import</span><span class="pill">🌐 เว็บ</span><span class="pill">🎮 เกม</span><span class="pill">🏗️ โปรแกรมใหญ่</span></div>
   <button class="big" onclick="enter()">เริ่มเรียนเลย →</button>
 </section>
 
@@ -53,6 +53,7 @@ table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px so
 </div>
 
 <script>
+window.addEventListener("error",e=>{const b=document.createElement("pre");b.style.cssText="position:fixed;bottom:0;left:0;right:0;background:#b00020;color:#fff;padding:8px;margin:0;z-index:99;font-size:12px;white-space:pre-wrap";b.textContent="Error: "+e.message+" (line "+e.lineno+")";document.body.appendChild(b)});
 const L=[
 {t:"เริ่มต้น & print()",r:"0–10",d:"Python คือภาษาที่อ่านง่าย ใช้ได้ทั้งเว็บ ข้อมูล AI และสคริปต์ ติดตั้งจาก python.org แล้วพิมพ์ข้อความออกหน้าจอด้วย print()",c:'print("สวัสดี Python!")\nprint(1 + 2)\n# บรรทัดที่ขึ้นต้นด้วย # คือคอมเมนต์',o:"สวัสดี Python!\n3"},
 {t:"ตัวแปร & ชนิดข้อมูล",r:"10–20",d:"ตัวแปรคือกล่องเก็บค่า ชนิดหลัก: int (จำนวนเต็ม), float (ทศนิยม), str (ข้อความ), bool (True/False)",c:'name = "แพร"\nage = 20\nheight = 1.65\nstudent = True\nprint(name, age, type(height))',o:"แพร 20 <class 'float'>"},
@@ -140,13 +141,16 @@ open:(n,m="r")=>{if(m=="w")FS[n]="";return{write(s){FS[n]=(FS[n]||"")+s},read(){
 math:{sqrt:Math.sqrt,pi:Math.PI,floor:Math.floor,ceil:Math.ceil,pow:Math.pow},
 random:{randint:(a,b)=>a+Math.floor(Math.random()*(b-a+1)),choice:a=>a[Math.floor(Math.random()*a.length)],random:Math.random},
 ValueError:m=>new Error("ValueError: "+m),Exception:m=>new Error(m)};
-(()=>{const D=(o,n,f)=>Object.defineProperty(o,n,{value:f,writable:true,configurable:true});
+const PATCH=[];
+(()=>{const D=(o,n,f)=>PATCH.push([o,n,f]);
 D(String.prototype,"upper",function(){return this.toUpperCase()});D(String.prototype,"lower",function(){return this.toLowerCase()});
 D(String.prototype,"strip",function(){return this.trim()});D(String.prototype,"startswith",function(s){return this.startsWith(s)});
 D(String.prototype,"endswith",function(s){return this.endsWith(s)});D(String.prototype,"join",function(a){return it_(a).join(String(this))});
 D(Array.prototype,"append",Array.prototype.push);
 D(Object.prototype,"items",function(){return Object.entries(this)});D(Object.prototype,"keys",function(){return Object.keys(this)});
 D(Object.prototype,"values",function(){return Object.values(this)});D(Object.prototype,"get",function(k,d){return k in this?this[k]:d})})();
+function patchOn(){PATCH.forEach(([o,n,f])=>Object.defineProperty(o,n,{value:f,writable:true,configurable:true}))}
+function patchOff(){PATCH.forEach(([o,n])=>{delete o[n]})}
 const tx=s=>s.replace(/\bTrue\b/g,"true").replace(/\bFalse\b/g,"false").replace(/\bNone\b/g,"null").replace(/\bprint\(/g,"__p(").replace(/^raise\s+/,"throw ")
 .replace(/lambda\s*([^:]*):\s*(.*)$/,(m,a,b)=>{let x=(b.match(/\)/g)||[]).length-(b.match(/\(/g)||[]).length,t="";while(x-->0&&b.endsWith(")")){b=b.slice(0,-1);t+=")"}return"(("+a+")=>("+b+"))"+t})
 .replace(/\[([^\[\]]+?)\s+for\s+(\w+)\s+in\s+([^\[\]]+?)(?:\s+if\s+([^\[\]]+?))?\]/g,(m,e,v,i,c)=>`__it(${i})${c?`.filter((${v})=>${c})`:""}.map((${v})=>${e})`)
@@ -186,10 +190,10 @@ function py2js(src){
  return out.join("\n").replace(/\u0001(\d+)\u0002/g,(a,i)=>{const[f,q]=strs[i];return f?fstr(q):q});
 }
 function runPy(){
- OUT=[];IN=$("#inp").value.split("\n").filter(Boolean);GC=0;FS={};let r;
+ patchOn();OUT=[];IN=$("#inp").value.split("\n").filter(Boolean);GC=0;FS={};let r;
  try{new Function(...Object.keys(PY),py2js($("#ed").value))(...Object.values(PY));r=OUT.join("\n")}
  catch(e){r=OUT.join("\n")+(OUT.length?"\n":"")+"❌ "+(e.name=="ReferenceError"?"NameError: name '"+e.message.split(" ")[0]+"' is not defined":e.name=="SyntaxError"?"SyntaxError: โครงสร้างโค้ดผิด หรือใช้ฟีเจอร์ที่ตัวจำลองยังไม่รองรับ":e.message)}
- $("#res").textContent=r||"(ไม่มีผลลัพธ์)"}
+ patchOff(); $("#res").textContent=r||"(ไม่มีผลลัพธ์)"}
 const TA="width:100%;background:var(--code);color:var(--codetx);border:0;border-radius:10px;padding:12px;font:.9rem/1.5 ui-monospace,Menlo,monospace;margin:8px 0";
 function vCode(){
  const x=L[lv];
@@ -199,7 +203,7 @@ function vCode(){
  <div class="mut">ค่าสำหรับ input() (บรรทัดละ 1 ค่า)</div><textarea id="inp" spellcheck="false" style="${TA};height:56px">${esc(x.i||"")}</textarea>
  <div class="row"><button class="sm" onclick="runPy()">▶ รัน</button><button class="sm" onclick="cp()">📋 คัดลอก</button><button class="sm" onclick="vCode()">↺ รีเซ็ต</button></div>
  <pre class="out" id="res">ผลลัพธ์จะแสดงที่นี่</pre>
- <div class="mut">รองรับ: print, ตัวแปร, if/for/while, def, list/dict/set, f-string, try/except, lambda, comprehension, math, random · ยังไม่รองรับ: class และไลบรารีอื่น · except จับทุก error · เลข 4.0 อาจแสดงเป็น 4</div></div>`}
+ <div class="mut">รองรับ: print, ตัวแปร, if/for/while, def, list/dict/set, f-string, try/except, lambda, comprehension, math, random · ตัวจำลองไม่รองรับ class และไลบรารีอื่น · except จับทุก error · เลข 4.0 อาจแสดงเป็น 4 · เปิด ⚡ Python จริงเพื่อรันได้ครบ</div></div>`}
 function vContent(){
  const p=Math.round(done.size/L.length*100);
  $("#main").innerHTML=`<div class="card"><h3>ความคืบหน้า ${p}%</h3><div class="bar"><i style="width:${p}%"></i></div><div class="mut">ติ๊ก "เรียนแล้ว" เมื่อจบแต่ละบท</div></div>`+
@@ -214,6 +218,367 @@ function go(t){tab=t;
  const tabs=[["code","&lt;/&gt; Code"],["content","📘 เนื้อหา"],["words","🔤 คำที่ใช้"],["imp","📦 import"],["big","🏗️ โปรแกรมใหญ่"]];
  $("#nav").innerHTML=tabs.map(([k,n])=>`<button class="${k==t?"on":""}" onclick="go('${k}')">${n}</button>`).join("");
  ({code:vCode,content:vContent,words:vWords,imp:vImport,big:vBig})[t]();scrollTo(0,0)}
+/* ===== v3: ต่อยอดเว็บ + เกม + ขั้นกลาง ===== */
+L.forEach(x=>x.g="พื้นฐาน");
+const A=(g,r,t,d,c,o,pts,err,ex,n,i)=>{L.push({g,r,t,d,c,o,n,i});DT.push([pts,err,ex])};
+A("ขั้นกลาง","ต่อยอด · ขั้นกลาง","Generator & Decorator","generator ใช้ yield ส่งค่าทีละตัวโดยไม่เก็บทั้งหมดในหน่วยความจำ ส่วน decorator คือฟังก์ชันที่ห่อฟังก์ชันอื่นเพื่อเพิ่มความสามารถ",
+`def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+def timer(func):
+    import time
+    def wrapper(*args, **kwargs):
+        t = time.time()
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} ใช้ {time.time() - t:.3f}s")
+        return result
+    return wrapper
+
+@timer
+def work():
+    return sum(range(10**6))
+
+print(list(countdown(3)))
+work()`,"[3, 2, 1]\nwork ใช้ 0.0xx s",
+"yield ทำให้ฟังก์ชันหยุดพักและทำต่อได้|*args รับตำแหน่งไม่จำกัด **kwargs รับชื่อ=ค่าไม่จำกัด|@ชื่อ เหนือ def คือการส่งฟังก์ชันเข้า decorator|Flask ใช้ decorator @app.route เป็นหลัก","ลืม return wrapper ทำให้ฟังก์ชันที่ถูก decorate กลายเป็น None","เขียน decorator @log ที่ print ชื่อฟังก์ชันก่อนทำงาน","ไม่ต้องติดตั้งเพิ่ม (ตัวจำลองยังไม่รองรับ yield)");
+A("ขั้นกลาง","ต่อยอด · ขั้นกลาง","OOP ขั้นสูง: สืบทอด, property, dataclass","ใช้คลาสสร้างโครงสร้างโปรแกรมที่ขยายต่อได้ เป็นพื้นฐานของทั้งเว็บเฟรมเวิร์กและเกม",
+`from dataclasses import dataclass
+
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    def speak(self):
+        return "..."
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name}: โฮ่ง!"
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+class Circle:
+    def __init__(self, r):
+        self._r = r
+    @property
+    def area(self):
+        return 3.14159 * self._r ** 2
+
+print(Dog("ข้าวโพด").speak(), Point(1, 2), Circle(2).area)`,"ข้าวโพด: โฮ่ง! Point(x=1, y=2) 12.56636",
+"คลาสลูกสืบทอดจากแม่และ override เมธอดได้|super().__init__() เรียกตัวสร้างของแม่|@property ทำให้เมธอดใช้เหมือน attribute|@dataclass สร้าง __init__ และ __repr__ ให้อัตโนมัติ|เมธอดพิเศษ: __str__, __len__, __eq__","แก้ attribute ของคลาสแม่โดยไม่เรียก super().__init__() ทำให้ attribute หาย","สร้างคลาส Player และ Enemy ที่สืบทอดจาก Character มี hp และ attack()","ไม่ต้องติดตั้งเพิ่ม (ตัวจำลองยังไม่รองรับ class)");
+A("ขั้นกลาง","ต่อยอด · ขั้นกลาง","ไลบรารีมาตรฐาน: json, re, datetime, collections","Python มีเครื่องมือสำเร็จรูปมากมาย เรียนรู้ 4 ตัวนี้ก่อนเพราะใช้ในงานเว็บและข้อมูลบ่อยที่สุด",
+`import json, re
+from datetime import datetime
+from collections import Counter
+
+data = json.loads('{"name": "แพร", "age": 20}')
+print(data["name"], json.dumps(data, ensure_ascii=False))
+print(re.findall(r"\\d+", "ห้อง 12 ชั้น 3"))
+print(Counter("banana").most_common(1))
+print(datetime(2026, 10, 9).strftime("%d/%m/%Y"))`,"แพร {\"name\": \"แพร\", \"age\": 20}\n['12', '3']\n[('a', 3)]\n09/10/2026",
+"json.loads แปลงข้อความเป็น dict, json.dumps ทำกลับ|re.findall / re.search / re.sub ค้นและแทนที่ด้วยรูปแบบ|datetime.strftime จัดรูปแบบวันที่ strptime อ่านจากข้อความ|Counter นับความถี่, defaultdict สร้าง dict ที่มีค่าเริ่มต้น","json.dumps ไม่ใส่ ensure_ascii=False ทำให้ภาษาไทยเป็นรหัส \\u0e41","อ่านไฟล์ข้อความ แล้วนับคำที่พบบ่อยที่สุด 5 อันดับด้วย Counter","ไม่ต้องติดตั้งเพิ่ม (ตัวจำลองยังไม่รองรับโมดูลเหล่านี้)");
+A("ขั้นกลาง","ต่อยอด · ขั้นกลาง","โมดูล, package, venv และ pytest","แยกโค้ดเป็นหลายไฟล์แล้ว import ใช้กัน พร้อมทดสอบอัตโนมัติ เป็นขั้นแรกของการเขียนโปรแกรมขนาดใหญ่ (ดูเมนู โปรแกรมใหญ่)",
+`# utils.py
+def add(a, b):
+    return a + b
+
+# main.py
+from utils import add
+
+if __name__ == "__main__":
+    print(add(2, 3))
+
+# test_utils.py
+from utils import add
+
+def test_add():
+    assert add(2, 3) == 5`,"main.py พิมพ์ 5  |  pytest: 1 passed",
+"1 ไฟล์ .py = 1 โมดูล โฟลเดอร์ที่มี __init__.py = 1 package|if __name__ == '__main__' รันเฉพาะเมื่อเปิดไฟล์นั้นตรงๆ|สร้าง venv ต่อโปรเจกต์ แล้ว pip install ในนั้น|ชื่อไฟล์เทสต์ขึ้นต้น test_ แล้วรัน pytest","ตั้งชื่อไฟล์ซ้ำกับโมดูลมาตรฐาน เช่น random.py ทำให้ import ผิด","แยกฟังก์ชันของเกมทายเลขเป็น logic.py แล้วเขียนเทสต์ให้ฟังก์ชันตรวจคำตอบ","pip install pytest");
+A("ขั้นกลาง","ต่อยอด · ขั้นกลาง","ฐานข้อมูล SQLite","เก็บข้อมูลถาวรแบบมีโครงสร้าง ใช้ได้ทั้งเว็บและเกม (เช่น เก็บคะแนนสูงสุด) โดยไม่ต้องติดตั้งเซิร์ฟเวอร์",
+`import sqlite3
+
+con = sqlite3.connect("app.db")
+con.execute("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, name TEXT)")
+con.execute("INSERT INTO users(name) VALUES (?)", ("แพร",))
+con.commit()
+for row in con.execute("SELECT * FROM users"):
+    print(row)
+con.close()`,"(1, 'แพร')",
+"CRUD = Create / Read / Update / Delete ตรงกับ INSERT / SELECT / UPDATE / DELETE|ใส่ค่าด้วย ? เสมอ ห้ามต่อสตริงเอง (กัน SQL injection)|ต้อง commit() หลังแก้ข้อมูล|ใช้ fetchone() / fetchall() ดึงผลลัพธ์","ต่อ SQL ด้วย f-string จากข้อมูลผู้ใช้ ทำให้ถูกโจมตีแบบ SQL injection ได้","สร้างตาราง scores(name, score) แล้วดึง 3 อันดับสูงสุดด้วย ORDER BY score DESC LIMIT 3","ไม่ต้องติดตั้งเพิ่ม (มากับ Python)");
+A("เกม","เกม · เริ่มต้น","เกมแรก: ทายตัวเลข","เกมในเทอร์มินัลใช้แค่ลูป เงื่อนไข และ input() ที่เรียนมา รันในตัวจำลองได้เลย (ใส่ค่าทายในช่อง input)",
+`import random
+secret = 7  # เล่นจริงเปลี่ยนเป็น random.randint(1, 10)
+tries = 0
+while True:
+    guess = int(input("ทายเลข 1-10: "))
+    tries += 1
+    if guess == secret:
+        print(f"ถูก! ใช้ {tries} ครั้ง")
+        break
+    elif guess < secret:
+        print("น้อยไป")
+    else:
+        print("มากไป")`,"ทายเลข 1-10: 3\nน้อยไป\nทายเลข 1-10: 9\nมากไป\nทายเลข 1-10: 7\nถูก! ใช้ 3 ครั้ง",
+"เกมทุกเกมมี 3 ส่วน: รับอินพุต → อัปเดตสถานะ → แสดงผล|ตัวแปรเก็บสถานะเกม เช่น คะแนน ชีวิต จำนวนครั้ง|ใช้ random สุ่มเหตุการณ์ให้เกมไม่ซ้ำเดิม|ต่อยอดได้เป็นเกมเป่ายิงฉุบ, เกมแขวนคอ, text adventure","ใช้ int(input()) แล้วผู้เล่นพิมพ์ตัวอักษร ทำให้โปรแกรม error ให้ครอบด้วย try/except","เพิ่มจำกัด 5 ครั้ง ถ้าไม่ถูกให้แพ้ และถามเล่นอีกรอบ",null,"3\n9\n7");
+A("เกม","เกม · Pygame","Pygame: หน้าต่างเกม, game loop, ควบคุมตัวละคร","Pygame คือไลบรารีทำเกม 2D หัวใจคือ game loop ที่วนซ้ำ: รับอีเวนต์ → อัปเดต → วาด → จำกัด FPS",
+`import pygame
+
+pygame.init()
+screen = pygame.display.set_mode((640, 360))
+clock = pygame.time.Clock()
+x, y = 300, 160
+running = True
+
+while running:
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            running = False
+    k = pygame.key.get_pressed()
+    x += (k[pygame.K_RIGHT] - k[pygame.K_LEFT]) * 5
+    y += (k[pygame.K_DOWN] - k[pygame.K_UP]) * 5
+    screen.fill((20, 24, 40))
+    pygame.draw.rect(screen, (247, 201, 72), (x, y, 40, 40))
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()`,"หน้าต่างเกม สี่เหลี่ยมสีเหลืองเลื่อนตามปุ่มลูกศร",
+"พิกัด (0,0) อยู่มุมซ้ายบน x เพิ่มไปทางขวา y เพิ่มลงล่าง|ต้องจัดการ pygame.QUIT เพื่อให้ปิดหน้าต่างได้|clock.tick(60) คุมความเร็วเกมให้เท่ากันทุกเครื่อง|สีเป็นชุด (R, G, B) ค่า 0–255","วาดแล้วลืม pygame.display.flip() ทำให้หน้าจอไม่อัปเดต","เพิ่มให้ตัวละครไม่ออกนอกหน้าต่าง และเปลี่ยนสีเมื่อกดเว้นวรรค","pip install pygame");
+A("เกม","เกม · Pygame","Pygame: ชนกัน, คะแนน, ข้อความ","ใช้ pygame.Rect ตรวจการชนด้วย colliderect() แล้วเพิ่มคะแนนและสุ่มตำแหน่งเหรียญใหม่ เป็นแกนของเกมเก็บของ/หลบสิ่งกีดขวาง",
+`import pygame, random
+
+pygame.init()
+screen = pygame.display.set_mode((480, 480))
+font = pygame.font.SysFont(None, 32)
+clock = pygame.time.Clock()
+player = pygame.Rect(220, 420, 40, 40)
+coin = pygame.Rect(random.randint(0, 440), random.randint(0, 440), 24, 24)
+score = 0
+running = True
+
+while running:
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            running = False
+    k = pygame.key.get_pressed()
+    player.x += (k[pygame.K_d] - k[pygame.K_a]) * 6
+    player.y += (k[pygame.K_s] - k[pygame.K_w]) * 6
+    if player.colliderect(coin):
+        score += 1
+        coin.topleft = (random.randint(0, 440), random.randint(0, 440))
+    screen.fill((10, 14, 28))
+    pygame.draw.rect(screen, (106, 169, 224), player)
+    pygame.draw.ellipse(screen, (247, 201, 72), coin)
+    screen.blit(font.render(f"Score {score}", True, (255, 255, 255)), (10, 10))
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()`,"เก็บเหรียญด้วย W A S D คะแนนเพิ่มทีละ 1 มุมซ้ายบน",
+"Rect เก็บตำแหน่งและขนาด มี colliderect() ตรวจการชน|screen.blit() วางภาพหรือข้อความลงจอ|เพิ่มความยาก: ให้ความเร็วเพิ่มตามคะแนน หรือจับเวลาด้วย pygame.time.get_ticks()|เก็บ high score ลงไฟล์ JSON หรือ SQLite","ย้าย Rect ด้วยการเปลี่ยน x/y ตัวแปรแยก แล้ว Rect ไม่ขยับตาม ให้แก้ที่ rect.x / rect.y โดยตรง","เพิ่มศัตรูที่เคลื่อนที่ ชนแล้วเกมจบและแสดง Game Over","pip install pygame");
+A("เกม","เกม · โครงสร้างใหญ่","โครงเกมแบบ OOP และเส้นทางต่อยอด","เมื่อเกมโตขึ้น ให้แยกหน้าที่ออกเป็นคลาสและเมธอด เพื่อเพิ่มด่าน ศัตรู และเมนูได้โดยไม่รก",
+`class Game:
+    def __init__(self):
+        self.running = True
+        self.score = 0
+
+    def handle_events(self):
+        ...
+
+    def update(self):
+        ...
+
+    def draw(self):
+        ...
+
+    def run(self):
+        while self.running:
+            self.handle_events()
+            self.update()
+            self.draw()
+
+if __name__ == "__main__":
+    Game().run()`,"โครงโปรแกรมที่ใช้เป็นฐานต่อ ไม่มีผลลัพธ์ในตัวเอง",
+"แยกคลาส Player, Enemy, Bullet โดยแต่ละคลาสมี update() และ draw()|แยกสถานะเกม: เมนู / เล่น / เกมจบ|แยกไฟล์: assets/ (ภาพ เสียง), game.py, entities.py|ทำไฟล์ติดตั้งให้เพื่อนด้วย pyinstaller --onefile|ไอเดียเกม: Snake, Pong, Flappy, Space Shooter, Platformer","ใส่ตรรกะทุกอย่างใน while เดียวยาวหลายร้อยบรรทัด แก้หรือเพิ่มฟีเจอร์ยากมาก","ปรับเกมเก็บเหรียญจากบทก่อนให้เป็นคลาส Game พร้อมหน้าเมนูเริ่มเกม","ไม่ต้องติดตั้งเพิ่ม");
+A("เว็บ","เว็บ · พื้นฐาน","เว็บทำงานอย่างไร + HTML/CSS/JS ที่ต้องรู้","ก่อนใช้ Python ทำเว็บ ต้องเข้าใจว่าเบราว์เซอร์ส่ง request ไปเซิร์ฟเวอร์ แล้วรับ HTML กลับมาแสดง Python ทำหน้าที่ฝั่งเซิร์ฟเวอร์",
+`<!-- index.html : เปิดด้วยเบราว์เซอร์ได้เลย -->
+<h1 id="title">สวัสดี</h1>
+<button onclick="hi()">กดฉัน</button>
+<script>
+  function hi() {
+    document.getElementById("title").textContent = "Python + Web!";
+  }
+<\/script>`,"กดปุ่มแล้วหัวข้อเปลี่ยนข้อความเป็น Python + Web!",
+"HTML โครงสร้างหน้า, CSS ตกแต่ง, JavaScript ทำงานในเบราว์เซอร์|Client = เบราว์เซอร์, Server = โปรแกรม Python ของเรา|HTTP method: GET ขอข้อมูล, POST ส่งข้อมูล|ตอบกลับเป็น HTML (หน้าเว็บ) หรือ JSON (API)","สับสนว่า Python รันในเบราว์เซอร์ จริงๆ Python รันบนเซิร์ฟเวอร์ ส่วนเบราว์เซอร์รันแค่ JavaScript","สร้างหน้า HTML แนะนำตัว 1 หน้า มีหัวข้อ รูป และลิงก์ 2 อัน","เปิดไฟล์ .html ด้วยเบราว์เซอร์ (ไม่ใช่โค้ด Python)");
+A("เว็บ","เว็บ · Flask","Flask: เว็บแรกด้วย Python","Flask เป็นเว็บเฟรมเวิร์กขนาดเล็ก เรียนง่าย ใช้ @app.route ผูก URL กับฟังก์ชัน แล้ว return ข้อความ HTML กลับไป",
+`from flask import Flask, render_template_string
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "<h1>สวัสดี Flask!</h1>"
+
+@app.route("/hello/<name>")
+def hello(name):
+    return render_template_string("<p>สวัสดี {{ name }}</p>", name=name)
+
+if __name__ == "__main__":
+    app.run(debug=True)`,"เปิด http://127.0.0.1:5000/ เห็น สวัสดี Flask!  ·  /hello/แพร เห็น สวัสดี แพร",
+"route คือเส้นทาง URL <name> รับค่าจาก URL|Jinja2 template: {{ ตัวแปร }}, {% for %}, {% if %}|แยก HTML ไว้ในโฟลเดอร์ templates/ แล้วใช้ render_template|debug=True รีโหลดอัตโนมัติ ใช้เฉพาะตอนพัฒนา","ตั้งชื่อไฟล์ว่า flask.py ทำให้ import flask ชนกับไฟล์ตัวเอง","เพิ่มหน้า /about และหน้า /square/<int:n> ที่แสดงกำลังสองของ n","pip install flask");
+A("เว็บ","เว็บ · Flask + DB","Flask + SQLite: แอป Todo","รวมสิ่งที่เรียนมาเป็นแอปจริง: ฟอร์ม (POST), ฐานข้อมูล, แสดงรายการ และลบ",
+`from flask import Flask, request, redirect, render_template_string
+import sqlite3
+
+app = Flask(__name__)
+
+def db():
+    con = sqlite3.connect("todo.db")
+    con.execute("CREATE TABLE IF NOT EXISTS todo(id INTEGER PRIMARY KEY, text TEXT)")
+    return con
+
+PAGE = """
+<form method=post><input name=text><button>เพิ่ม</button></form>
+<ul>{% for i, t in items %}<li>{{ t }} <a href="/del/{{ i }}">ลบ</a></li>{% endfor %}</ul>
+"""
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    con = db()
+    if request.method == "POST":
+        con.execute("INSERT INTO todo(text) VALUES (?)", (request.form["text"],))
+        con.commit()
+    items = con.execute("SELECT id, text FROM todo").fetchall()
+    return render_template_string(PAGE, items=items)
+
+@app.route("/del/<int:i>")
+def delete(i):
+    con = db()
+    con.execute("DELETE FROM todo WHERE id=?", (i,))
+    con.commit()
+    return redirect("/")
+
+if __name__ == "__main__":
+    app.run(debug=True)`,"หน้าเว็บมีช่องกรอก กดเพิ่มแล้วรายการขึ้นพร้อมปุ่มลบ ข้อมูลอยู่ในไฟล์ todo.db",
+"รูปแบบ Post/Redirect/Get: หลังรับฟอร์มให้ redirect เพื่อกันส่งซ้ำ|request.form อ่านค่าจากฟอร์ม|ใช้ ? ใน SQL ทุกครั้ง|ต่อยอด: ระบบสมาชิก (login), อัปโหลดไฟล์, บล็อก, ร้านค้า","ใส่ข้อมูลผู้ใช้ลงในหน้า HTML ตรงๆ โดยไม่ผ่าน Jinja2 เสี่ยงโดน XSS (Jinja2 escape ให้อัตโนมัติ)","เพิ่มปุ่ม 'เสร็จแล้ว' ที่ขีดฆ่ารายการ โดยเพิ่มคอลัมน์ done","pip install flask");
+A("เว็บ","เว็บ · API","FastAPI: ทำ REST API","FastAPI เหมาะกับสร้าง API ให้แอปมือถือหรือเว็บหน้าบ้าน (React ฯลฯ) เรียกใช้ ตรวจชนิดข้อมูลให้อัตโนมัติ และสร้างหน้าเอกสาร /docs ให้ในตัว",
+`from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Item(BaseModel):
+    name: str
+    price: float
+
+@app.get("/")
+def root():
+    return {"msg": "hello"}
+
+@app.post("/items")
+def add_item(item: Item):
+    return {"name": item.name, "total": item.price * 1.07}
+
+# รัน: uvicorn main:app --reload แล้วเปิด /docs`,"GET / ได้ {\"msg\": \"hello\"}  ·  POST /items ได้ราคารวม VAT 7%",
+"@app.get / @app.post / @app.put / @app.delete ตรงกับ HTTP method|pydantic ตรวจรูปแบบข้อมูลให้ ส่งผิดชนิดจะตอบ 422 เอง|ส่งกลับ dict จะกลายเป็น JSON อัตโนมัติ|เปิด /docs เพื่อลองยิง API ผ่านหน้าเว็บได้","ลืม type hint ในพารามิเตอร์ FastAPI จึงไม่รู้ว่าจะอ่านข้อมูลจากที่ใด","ทำ API CRUD ของรายการสินค้าเก็บใน SQLite","pip install fastapi uvicorn");
+A("เว็บ","เว็บ · ขึ้นออนไลน์","Deploy และความปลอดภัยเบื้องต้น","ขั้นตอนนำเว็บขึ้นออนไลน์ให้คนอื่นใช้ได้ พร้อมข้อควรระวังด้านความปลอดภัยที่ต้องทำก่อนเปิดใช้จริง",
+`# requirements.txt
+flask
+gunicorn
+
+# Procfile
+web: gunicorn app:app
+
+# อ่านค่าลับจาก environment ไม่ฝังในโค้ด
+import os
+SECRET_KEY = os.environ["SECRET_KEY"]`,"พร้อม deploy บนบริการอย่าง Render, Railway, Fly.io หรือ PythonAnywhere",
+"ปิด debug=True ในเว็บจริง และรันผ่าน gunicorn หรือ uvicorn|รหัสผ่านต้อง hash (werkzeug.security) ห้ามเก็บตรงๆ|เก็บ key/รหัสลับใน environment variable หรือ .env (ไม่ commit ขึ้น Git)|ตรวจข้อมูลจากผู้ใช้ทุกครั้ง ใช้ HTTPS","commit ไฟล์ .env หรือ API key ขึ้น GitHub สาธารณะ ต้องเปลี่ยน key ทันที","ทำให้แอป Todo ใช้ DATABASE_PATH จาก environment แล้ว deploy ขึ้นบริการฟรี","ไม่ต้องติดตั้งเพิ่ม (ขึ้นกับผู้ให้บริการ)");
+/* คำศัพท์ + โมดูลเพิ่ม + ไกด์ */
+K.push(["@decorator","ห่อฟังก์ชันเพื่อเพิ่มความสามารถ","ขั้นสูง"],["*args / **kwargs","รับอาร์กิวเมนต์ไม่จำกัด","ฟังก์ชัน"],["super()","เรียกคลาสแม่","OOP"],["@property","เรียกเมธอดเหมือน attribute","OOP"],["@dataclass","สร้างคลาสเก็บข้อมูลอัตโนมัติ","OOP"],["__init__ / __str__","เมธอดพิเศษ (dunder)","OOP"],["assert","ตรวจเงื่อนไขในเทสต์","Error"],["nonlocal","แก้ตัวแปรของฟังก์ชันชั้นนอก","ตัวแปร"],["enumerate() / zip()","วนพร้อมลำดับ / จับคู่หลาย list","ฟังก์ชันในตัว"],["route","เส้นทาง URL ของเว็บ","เว็บ"],["request / response","คำขอ / คำตอบ HTTP","เว็บ"],["GET / POST","ขอข้อมูล / ส่งข้อมูล","เว็บ"],["template","ไฟล์ HTML ที่ใส่ตัวแปรได้","เว็บ"],["API / JSON","ช่องทางให้โปรแกรมคุยกัน / รูปแบบข้อมูล","เว็บ"],["game loop","วนรับอินพุต อัปเดต วาด","เกม"],["Rect","กรอบสี่เหลี่ยมใช้ตรวจการชน","เกม"],["FPS / tick","จำนวนเฟรมต่อวินาที","เกม"]);
+M.push({n:"re",d:"ค้นข้อความด้วย regex",c:'import re\nprint(re.findall(r"\\d+", "a1b22"))',o:"['1', '22']"},
+{n:"pathlib",d:"จัดการพาธไฟล์แบบวัตถุ",c:'from pathlib import Path\nprint(Path("data").exists())',o:"False"},
+{n:"sqlite3",d:"ฐานข้อมูลในไฟล์ (มากับ Python)",c:'import sqlite3\ncon = sqlite3.connect("app.db")\nprint(con.execute("SELECT 1+1").fetchone())',o:"(2,)"},
+{n:"asyncio",d:"งานพร้อมกันแบบ async",c:'import asyncio\nasync def main():\n    await asyncio.sleep(1)\n    print("done")\nasyncio.run(main())',o:"done"},
+{n:"tkinter",d:"โปรแกรมหน้าต่าง GUI (มากับ Python)",c:'import tkinter as tk\nw = tk.Tk()\ntk.Label(w, text="สวัสดี").pack()\nw.mainloop()',o:"หน้าต่างพร้อมข้อความ"},
+{n:"flask (ติดตั้งเพิ่ม)",d:"เว็บเฟรมเวิร์ก  ·  pip install flask",c:'from flask import Flask\napp = Flask(__name__)',o:"สร้างแอปเว็บ"},
+{n:"pygame (ติดตั้งเพิ่ม)",d:"ทำเกม 2D  ·  pip install pygame",c:'import pygame\npygame.init()',o:"พร้อมสร้างหน้าต่างเกม"},
+{n:"pytest (ติดตั้งเพิ่ม)",d:"ทดสอบโค้ด  ·  pip install pytest",c:'def test_ok():\n    assert 1 + 1 == 2',o:"1 passed"});
+G.push(["10) เส้นทางต่อยอดหลังเรียนจบ","เลือกเส้นทางที่ตรงกับเป้าหมาย แล้วทำโปรเจกต์จริงอย่างน้อย 1 ชิ้นต่อเส้นทาง เพราะโปรเจกต์สอนได้มากกว่าการอ่านอย่างเดียว",
+"เว็บ     : Python → HTML/CSS/JS → Flask → SQLite → FastAPI → Deploy\nเกม      : Python → ทายเลข → Pygame → ชน/คะแนน → โครงแบบ OOP → pyinstaller\nข้อมูล/AI: pandas → matplotlib → scikit-learn\nโปรเจกต์ : Todo, บล็อก, ร้านค้าเล็ก, Snake, Flappy, API บันทึกค่าใช้จ่าย"]);
+/* UI: กรองตามสาย + ตัวจำลองบอกบทที่รันไม่ได้ */
+let fl="ทั้งหมด";
+vContent=function(){
+ const p=Math.round(done.size/L.length*100),gs=["ทั้งหมด","พื้นฐาน","ขั้นกลาง","เว็บ","เกม"];
+ $("#main").innerHTML=`<div class="card"><h3>ความคืบหน้า ${p}% (${done.size}/${L.length} บท)</h3><div class="bar"><i style="width:${p}%"></i></div>
+ <div class="row">${gs.map(g=>`<button class="chip ${g==fl?"on":""}" onclick="fl='${g}';vContent()">${g}</button>`).join("")}</div></div>`+
+ L.map((x,i)=>{if(fl!="ทั้งหมด"&&x.g!=fl)return"";const z=DT[i];return `<div class="card"><div class="mut">บทที่ ${i+1} · ${/^\d/.test(x.r)?"ระดับ "+x.r+"%":x.r}</div><h3>${x.t}</h3><p>${x.d}</p>${blk(x.c,x.o)}
+ <details open><summary><b>📌 รายละเอียดสำคัญ</b></summary><ul>${z[0].split("|").map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+ <p>⚠️ <b>ข้อผิดพลาดที่พบบ่อย:</b> ${esc(z[1])}</p><p>✏️ <b>แบบฝึกหัด:</b> ${esc(z[2])} <button class="sm" onclick="lv=${i};go('code')">${x.nr?"ดูโค้ดในหน้า Code":"ลองในตัวจำลอง"}</button></p></details>
+ <label><input type="checkbox" ${done.has(i)?"checked":""} onchange="tg(${i})"> เรียนแล้ว</label></div>`}).join("")};
+{const vc=vCode;vCode=function(){vc();const x=L[lv];
+ if(x.nr){$("#res").textContent="บทนี้รันในตัวจำลองไม่ได้ ให้คัดลอกโค้ดไปรันบนเครื่องของคุณ\nติดตั้ง: "+x.n+"\nผลที่ควรได้: "+x.o;[...document.querySelectorAll(".sm")].find(b=>b.textContent.includes("รัน")).classList.add("hide")}}}
+
+/* ===== v4: Python จริงด้วย Pyodide (โหลดเมื่อกดเปิด) ===== */
+L.forEach(x=>{x.nr=/Pygame|โครงเกม|เว็บทำงาน|Flask|FastAPI|Deploy|โมดูล, package/.test(x.t)});
+const PYV="0.26.4";
+let PYO=null,REAL=false;
+const PRE=`import builtins, sys, time
+_q = list(__inputs)
+def _input(p=""):
+    v = _q.pop(0) if _q else ""
+    print(p + v)
+    return v
+builtins.input = _input
+_t0 = time.time()
+def _tr(frame, event, arg):
+    if time.time() - _t0 > 5:
+        raise TimeoutError("โปรแกรมทำงานนานเกิน 5 วินาที (อาจเป็นลูปไม่รู้จบ)")
+    return _tr
+sys.settrace(_tr)`;
+async function bootPy(){
+ const bases=["https://cdn.jsdelivr.net/pyodide/v"+PYV+"/full/","https://cdn.jsdelivr.net/npm/pyodide@"+PYV+"/"];
+ let err;
+ for(const b of bases){try{return await loadPyodide({indexURL:b})}catch(e){err=e}}
+ throw err}
+function loadPyo(){
+ if(PYO)return PYO;
+ PYO=new Promise((ok,no)=>{
+  const s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/pyodide@"+PYV+"/pyodide.js";
+  s.onload=()=>bootPy().then(ok,e=>{PYO=null;no(e)});
+  s.onerror=()=>{PYO=null;no(new Error("โหลดสคริปต์ไม่ได้"))};
+  document.head.appendChild(s)});
+ return PYO}
+async function runReal(){
+ const res=$("#res");let py;
+ try{res.textContent="กำลังโหลด Python จริง (ครั้งแรก ~10MB) รอสักครู่...";py=await loadPyo()}
+ catch(e){REAL=false;res.textContent="โหลด Python จริงไม่ได้ ใช้ตัวจำลองแทน\n";runPy();return}
+ const out=[],code=$("#ed").value;
+ py.setStdout({batched:s=>out.push(s)});py.setStderr({batched:s=>out.push(s)});
+ try{
+  try{await py.loadPackagesFromImports(code)}catch(e){}
+  py.globals.set("__inputs",$("#inp").value.split("\n").filter(Boolean));
+  py.runPython(PRE);
+  const ns=py.globals.get("dict")();ns.set("__name__","__main__");
+  try{await py.runPythonAsync(code,{globals:ns})}finally{py.runPython("import sys;sys.settrace(None)");ns.destroy()}
+ }catch(e){out.push("❌ "+String(e.message||e).trim().split("\n").slice(-2).join("\n"))}
+ res.textContent=out.join("\n")||"(ไม่มีผลลัพธ์)"}
+function toggleReal(b){
+ REAL=!REAL;b.classList.toggle("on",REAL);
+ if(REAL){$("#res").textContent="กำลังโหลด Python จริง...";
+  loadPyo().then(()=>{$("#res").textContent="พร้อมแล้ว กด ▶ รัน"}).catch(()=>{REAL=false;b.classList.remove("on");$("#res").textContent="โหลด Python จริงไม่ได้ ใช้ตัวจำลองแทน"})}}
+async function runGo(){
+ if(REAL){await runReal();return}
+ runPy();const r=$("#res");
+ if(r.textContent.includes("❌"))r.textContent+="\n💡 ลองเปิด ⚡ Python จริง ด้านบน (รองรับ class, yield และไลบรารีมาตรฐาน)"}
+{const vc2=vCode;vCode=function(){vc2();const x=L[lv];
+ if(x.nr)return;
+ const d=document.createElement("div");d.className="row";
+ d.innerHTML=`<button class="chip ${REAL?"on":""}" onclick="toggleReal(this)">⚡ Python จริง (โหลด ~10MB)</button><span class="mut">รัน class / yield / json / re / datetime ได้ครบ</span>`;
+ $("#ed").before(d);
+ const b=[...document.querySelectorAll(".sm")].find(b=>b.textContent.includes("▶"));if(b)b.onclick=runGo}}
 </script>
 </body>
 </html>
